@@ -75,8 +75,10 @@ export default function HomeScreen() {
     if (selectedCategory) {
       const loadCocktails = async () => {
         try {
+          setLoading(true);
           const data = await fetchCocktailsByCategory(selectedCategory);
           setCocktails(data);
+          setLoading(false);
         } catch (error) {
           setError('Failed to load cocktails');
         }
@@ -233,7 +235,7 @@ export default function HomeScreen() {
     
    
 
-      <ScrollView style={{ flex: 1, gap: 16 }}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, gap: 16 }}>
         <Animated.View
           entering={FadeInDown.duration(500).delay(200)}
           style={{ gap: 24, borderWidth: 1 }}
