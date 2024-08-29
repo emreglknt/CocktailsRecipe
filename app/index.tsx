@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 
 
+
 const Welcome = () => {
 
     const animation = useRef<LottieView>(null);

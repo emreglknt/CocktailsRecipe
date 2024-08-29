@@ -5,12 +5,17 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { fetchCocktailsByCategory,fetchCocktailsByFirstLetter,fetchCocktailsBySearch} from '../api';
 import { LinearGradient } from 'expo-linear-gradient';
+import {router} from 'expo-router';
+
+
 
 
 
 interface Category {
   name: string;
   icon: string;
+
+  
 }
 
 
@@ -147,9 +152,12 @@ export default function HomeScreen() {
   );
 
 
+
+
+
+
   const renderCocktail = ({ item }) => (
     <CoctailCard key={item.idDrink} cocktail={item} />
-   
   );
 
 
@@ -158,23 +166,41 @@ export default function HomeScreen() {
 
 
   const CoctailCard = ({ cocktail }: { cocktail: Cocktail }) => (
-     <View style={{ width: '50%', margin:6, borderRadius: 15, overflow: 'hidden', shadowColor: '#152343', shadowOpacity: 0.5, shadowRadius: 10 }}>
-    
-     <ImageBackground
-        source={{ uri: cocktail.strDrinkThumb }}
-        style={{ height: 240, justifyContent: 'flex-end' }}
+    <Pressable
+    onPress={() => router.push(`/detail?cocktailId=${cocktail.idDrink}`)}
+
+    style={{
+      width: '50%',
+      margin: 6,
+      borderRadius: 15,
+      overflow: 'hidden',
+      shadowColor: '#152343',
+      shadowOpacity: 0.5,
+      shadowRadius: 10,
+    }}
+  >
+    <ImageBackground
+      source={{ uri: cocktail.strDrinkThumb }}
+      style={{ height: 240, justifyContent: 'flex-end' }}
+    >
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.7)']}
+        style={{ height: '25%', justifyContent: 'flex-end', padding: 8 }}
       >
-        <LinearGradient
-          colors={['transparent', 'rgba(0,0,0.4,0.7)']}
-          style={{ height: '25%', justifyContent: 'flex-end', padding: 8 }}
+        <Text
+          style={{
+            textAlign: 'center',
+            color: 'white',
+            fontSize: 20,
+            fontWeight: '600',
+          }}
         >
-     
-        <Text style={{ textAlign: 'center', color: 'white', fontSize: 20 ,color: 'white',fontWeight: '600'}}>
-        {cocktail.strDrink}
-      </Text>
+          {cocktail.strDrink}
+        </Text>
       </LinearGradient>
-      </ImageBackground>
-    </View>
+    </ImageBackground>
+  </Pressable>
+
 
   );
   
@@ -215,7 +241,6 @@ export default function HomeScreen() {
           </View>
         </Animated.View>
 
-        
 
       
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.15)', borderRadius: 22, padding: 16, margin: 16 }}>
@@ -235,7 +260,7 @@ export default function HomeScreen() {
     
    
 
-      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, gap: 16 }}>
+
         <Animated.View
           entering={FadeInDown.duration(500).delay(200)}
           style={{ gap: 24, borderWidth: 1 }}
@@ -250,30 +275,25 @@ export default function HomeScreen() {
             {categories.map((category) => renderCategory(category))}
           </ScrollView>
           
-          
-          {/* Categories List */}
-          <View style={{ height: "%100", justifyContent: 'center', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16}}>
-            {isLoading? (
+          </Animated.View>
+    
+
+            {/* FlatList for Cocktails */}
+            <View style={{ flex: 1 }}>
+            {isLoading ? (
               <ActivityIndicator size="large" color="#f97316" />
             ) : (
-
               <FlatList
-              data={cocktails}
-              showScrollIndicator={false}
-              renderItem={renderCocktail}
-              keyExtractor={(item) => item.idDrink}
-              numColumns={2} // Grid layout with 2 columns
-              contentContainerStyle={{ paddingHorizontal: 10 }}
-              columnWrapperStyle={{ justifyContent: 'center', alignItems: 'center', margin: 10, }}
-            />
+                data={cocktails}
+                showsVerticalScrollIndicator={false}
+                renderItem={renderCocktail}
+                keyExtractor={(item) => item.idDrink}
+                numColumns={2} // Grid layout with 2 columns
+                contentContainerStyle={{ paddingHorizontal: 10 }}
+                columnWrapperStyle={{ justifyContent: 'center', alignItems: 'center', margin: 10 }}
+              />
             )}
-          </View>
-
-  
-
-
-        </Animated.View>
-      </ScrollView>
-    </View>
+            </View>
+            </View>
   );
 }

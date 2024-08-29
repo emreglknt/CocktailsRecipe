@@ -37,10 +37,17 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{headerShown:false}}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="detail" />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>
-    </QueryClientProvider>
+    </QueryClientProvider> 
+
   );
 }
+
+
+
+
