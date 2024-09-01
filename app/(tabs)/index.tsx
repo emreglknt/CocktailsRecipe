@@ -30,13 +30,13 @@ const categories = [
   { id: "1", name: "Cocktail", icon: "wine-outline" },
   { id: "2", name: "Ordinary Drink", icon: "beer-outline" },
   { id: "3", name: "Punch / Party Drink", icon: "happy-outline" },
-  { id: "4", name: "Shot / Party Drink", icon: "wine-outline" },
+  { id: "4", name: "Shot", icon: "wine-outline" },
   { id: "5", name: "Shake", icon: "cafe-outline" },
   { id: "6", name: "Beer", icon: "beer-outline" },
-  { id: "7", name: "Homemade Liqueur / Party Drink", icon: "wine-outline" },
+  { id: "7", name: "Homemade Liqueur", icon: "wine-outline" },
   { id: "8", name: "Cocoa", icon: "cafe-outline" },
   { id: "9", name: "Coffee / Tea", icon: "cafe-outline" },
-  { id: "10", name: "Soft Drink / Party Drink", icon: "beer-outline" },
+  { id: "10", name: "Soft Drink", icon: "beer-outline" },
   { id: "11", name: "Other / Unknown", icon: "help-circle-outline" },
 ];
 
@@ -64,7 +64,7 @@ export default function HomeScreen() {
         setCocktails(data);
         setLoading(false);
       } catch (error) {
-        setError('Failed to load recipes');
+        setError('Failed to load cocktail recipes');
       }
     };
 
@@ -174,9 +174,11 @@ export default function HomeScreen() {
       margin: 6,
       borderRadius: 15,
       overflow: 'hidden',
-      shadowColor: '#152343',
-      shadowOpacity: 0.5,
-      shadowRadius: 10,
+      shadowColor: '#152343', 
+      shadowOpacity: 0.5,      
+      shadowRadius: 10,        
+      shadowOffset: { width: 0, height: 4 },  
+      elevation: 15,  
     }}
   >
     <ImageBackground
@@ -271,7 +273,7 @@ export default function HomeScreen() {
           </View>
 
           {/* Categories List */}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16, paddingLeft: 16 }}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}  style={{ marginBottom: 16, paddingLeft: 16 }}>
             {categories.map((category) => renderCategory(category))}
           </ScrollView>
           
