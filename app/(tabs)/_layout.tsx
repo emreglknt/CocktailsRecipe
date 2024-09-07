@@ -13,6 +13,10 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
+        tabBarStyle: {
+          backgroundColor: 'transparent', // Arka planı şeffaf yapar
+          borderTopWidth: 0, // Tab bar'ın üst sınırını kaldırır
+        },
       }}>
       <Tabs.Screen
         name="index"

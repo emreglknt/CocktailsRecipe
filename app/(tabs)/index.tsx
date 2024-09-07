@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {ActivityIndicator,Image,Pressable, ImageBackground,Text, View, ScrollView,FlatList, TextInput} from 'react-native';
+import {ActivityIndicator,Image,Pressable, ImageBackground,Text, View, ScrollView,FlatList, TextInput, RefreshControl} from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -51,6 +51,7 @@ export default function HomeScreen() {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
 
 
@@ -74,7 +75,7 @@ export default function HomeScreen() {
 
 
 
-
+// category
 
   useEffect(() => {
     if (selectedCategory) {
@@ -116,6 +117,18 @@ export default function HomeScreen() {
 
 
  
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    // Fetch new data
+    await fetchCocktailsByFirstLetter();
+    setRefreshing(false);
+  };
+
+  
+
+
+
 
 
 
@@ -221,10 +234,6 @@ export default function HomeScreen() {
     )
   }
   
- 
-
-  
-
 
 
 
@@ -269,7 +278,7 @@ export default function HomeScreen() {
         >
           {/* Categories */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, paddingTop: 16, alignItems: 'center' }}>
-            <Text style={{ fontSize: 20 ,fontWeight: '300'}}>Categories</Text>
+            <Text style={{ fontSize: 21 ,fontWeight: '300'}}> Categories ~🍹 </Text>
           </View>
 
           {/* Categories List */}
@@ -282,7 +291,7 @@ export default function HomeScreen() {
 
             {/* FlatList for Cocktails */}
             <View style={{ flex: 1 }}>
-            {isLoading ? (
+            {isLoading || refreshing ? (
               <ActivityIndicator size="large" color="#f97316" />
             ) : (
               <FlatList
@@ -293,9 +302,17 @@ export default function HomeScreen() {
                 numColumns={2} // Grid layout with 2 columns
                 contentContainerStyle={{ paddingHorizontal: 10 }}
                 columnWrapperStyle={{ justifyContent: 'center', alignItems: 'center', margin: 10 }}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    colors={['#f97316']}
+              
+                />
+                }
               />
             )}
             </View>
-            </View>
+     </View>
   );
 }

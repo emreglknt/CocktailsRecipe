@@ -56,29 +56,31 @@ const Detail = () => {
   }, [cocktailId]);
 
 
-
   useEffect(() => {
     const checkFavorite = async () => {
-      const favorite = await isFavorite(cocktailId);
+      const favorite = await isFavorite(details.idDrink);
       setIsFavoriteStatus(favorite);
     };
-    checkFavorite();
-  }, [cocktailId]);
-
-
-
-
-  const handleFavoriteToggle = async () => {
-    if (isFavoriteStatus) {
-      await removeFromFavorites(cocktailId);
-    } else {
-      await addToFavorites(cocktailId);
+    if (details?.idDrink) {
+      checkFavorite();
     }
-    setIsFavoriteStatus(!isFavoriteStatus);
-  };
+  }, [details?.idDrink]);
 
 
   
+
+  const handleFavoriteToggle = async (details) => {
+    if (isFavoriteStatus) {
+      await removeFromFavorites(details.idDrink); 
+    } else {
+      await addToFavorites(details);
+      
+    }
+  };
+  
+  
+
+
   if (error) {
     return <Text>{error}</Text>;
   }
@@ -87,6 +89,7 @@ const Detail = () => {
 
 
   return (
+
   isLoading ? (
     <ActivityIndicator size="xlarge" color="#f97316" />
   ) : (
@@ -108,14 +111,23 @@ const Detail = () => {
       >
         <ChevronLeftIcon size={24} strokeWidth={2.5} color="black" />
       </TouchableOpacity>
+
+
+
+
       
           <TouchableOpacity 
-            onPress={handleFavoriteToggle}
+            onPress={() => handleFavoriteToggle(details)}
             style={{ backgroundColor: '#274ab3', borderRadius: 14, padding: 7 }}
           >
             <HeartIcon size={35} color={isFavoriteStatus  ? "#ed2100" : "white"} />
           </TouchableOpacity>
-        </SafeAreaView>
+      
+      
+          
+      
+      
+          </SafeAreaView>
 
         <View style={styles.imageContainer}>
           <Image

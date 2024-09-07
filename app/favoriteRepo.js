@@ -1,14 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const FAVORITE_KEY = 'favorites';
+const FAVORITE_KEY = 'favoriteCocktails';
 
 // Favorilere ekleme fonksiyonu
-const addToFavorites = async (cocktailId) => {
+const addToFavorites = async (cocktail) => {
   try {
     const favorites = await AsyncStorage.getItem(FAVORITE_KEY);
     let favoriteList = favorites ? JSON.parse(favorites) : [];
-    if (!favoriteList.includes(cocktailId)) {
-      favoriteList.push(cocktailId);
+    if (!favoriteList.some(fav => fav.idDrink === cocktail.idDrink)) {
+      favoriteList.push(cocktail); // Store the entire object
       await AsyncStorage.setItem(FAVORITE_KEY, JSON.stringify(favoriteList));
     }
   } catch (error) {
@@ -17,18 +17,20 @@ const addToFavorites = async (cocktailId) => {
 };
 
 // Favorilerden kaldırma fonksiyonu
-const removeFromFavorites = async (cocktailId) => {
+const removeFromFavorites = async (cocktail) => {
   try {
     const favorites = await AsyncStorage.getItem(FAVORITE_KEY);
     if (favorites !== null) {
       let favoriteList = JSON.parse(favorites);
-      favoriteList = favoriteList.filter((id) => id !== cocktailId);
-      await AsyncStorage.setItem(FAVORITE_KEY, JSON.stringify(favoriteList));
+          favoriteList = favoriteList.filter((item) => item.idDrink !== cocktail.idDrink);
+          await AsyncStorage.setItem(FAVORITE_KEY, JSON.stringify(favoriteList));
     }
   } catch (error) {
     console.error('Error removing from favorites:', error);
   }
 };
+
+
 
 // Favori kontrol fonksiyonu
 const isFavorite = async (cocktailId) => {
