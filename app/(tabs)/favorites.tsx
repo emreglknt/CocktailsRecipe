@@ -1,9 +1,10 @@
 import { View, Text, Pressable, ImageBackground, StyleSheet, FlatList,Image} from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getFavorites } from '../favoriteRepo';
 import Animated from 'react-native-reanimated';
-import {router} from 'expo-router';
 import 'react-native-gesture-handler';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import { removeFromFavorites } from '../favoriteRepo';
@@ -22,21 +23,25 @@ const Favorites = () => {
 
 
 
-  
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        setLoading(true);
-        const data = await getFavorites();
-        setFavCocktails(data);
-        setLoading(false);
-      } catch (error) {
-        setError('Failed to load favorites');
-      }
-    };
+  const fetchFavorites = async () => {
+    try {
+      setLoading(true);
+      const data = await getFavorites(); 
+      setFavCocktails(data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError('Failed to load favorites');
+    }
+  };
 
-    fetchFavorites();
-  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchFavorites(); 
+    }, [])
+  );
+
 
 
 
@@ -104,7 +109,7 @@ const Favorites = () => {
                         <Text style={styles.cocktailDetail2}>{item.strCategory}</Text>
                     </View>
 
-                    <Text style={styles.cocktailDetail1}>{item.strInstructions}</Text>
+                    <Text style={styles.cocktailInstructions}>{item.strInstructions}</Text>
                 </View>
                 
 
@@ -205,26 +210,38 @@ const styles = StyleSheet.create({
   },
   cocktailName: {
     textAlign: 'center',
-    color: 'black',
-    fontSize: 20,
-    fontWeight: '500',
+    color: '#5B2C6F',
+    fontSize: 24,
+    fontWeight: '600',
     marginTop: 10,
 
   },
   cocktailDetail1:{
     textAlign: 'left',
-    color: 'black',
-    fontSize: 16,
-    fontWeight: '400',
+    color: '#922B21',
+    fontSize:19,
+    fontWeight: '500',
     marginTop: 10,
+    marginBottom: 10,
 
   },  
    cocktailDetail2:{
     textAlign: 'right',
-    color: 'black',
-    fontSize: 16,
-    fontWeight: '400',
+    color: '#922B21',
+    fontSize: 19,
+    fontWeight: '500',
     marginTop: 10,
+    marginBottom: 10,
+
+  },
+  cocktailInstructions: {
+    textAlign: 'left',
+    color: 'black',
+    fontSize: 18,
+    fontWeight: '400',
+    marginTop: 5,
+    marginBottom: 10,
+  
   },
 
 
@@ -237,7 +254,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 50,
     paddingTop: 10,
-    
     marginRight: 10,
     padding: 5,
   },

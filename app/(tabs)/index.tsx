@@ -6,6 +6,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { fetchCocktailsByCategory,fetchCocktailsByFirstLetter,fetchCocktailsBySearch} from '../api';
 import { LinearGradient } from 'expo-linear-gradient';
 import {router} from 'expo-router';
+import NetInfo from '@react-native-community/netinfo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getFavorites } from '../favoriteRepo';
 
 
 
@@ -56,13 +59,19 @@ export default function HomeScreen() {
 
 
 
-
   useEffect(() => {
     const loadCocktails = async () => {
       try {
         setLoading(true);
-        const data = await fetchCocktailsByFirstLetter(); // Fetch recipes starting with 'A'
+        const networkState = await NetInfo.fetch();
+        if (networkState.isConnected && networkState.isInternetReachable){
+        const data = await fetchCocktailsByFirstLetter();
         setCocktails(data);
+        } else {
+          const data = await getFavorites(); 
+          setCocktails(data);
+          setError('No internet connection');
+        }
         setLoading(false);
       } catch (error) {
         setError('Failed to load cocktail recipes');
@@ -75,17 +84,28 @@ export default function HomeScreen() {
 
 
 
+
+
 // category
 
   useEffect(() => {
     if (selectedCategory) {
       const loadCocktails = async () => {
         try {
+
           setLoading(true);
+          const networkState = await NetInfo.fetch();
+          if (networkState.isConnected && networkState.isInternetReachable) {
           const data = await fetchCocktailsByCategory(selectedCategory);
           setCocktails(data);
+          } else {
+            const data = await getFavorites(); 
+            setCocktails(data);
+            setError('No internet connection');
+          }
           setLoading(false);
         } catch (error) {
+       
           setError('Failed to load cocktails');
         }
       };
@@ -101,6 +121,7 @@ export default function HomeScreen() {
     if (searchQuery) {
       const loadCocktails = async () => {
         try {
+
           setLoading(true);
           const data = await fetchCocktailsBySearch(searchQuery);
           setCocktails(data);
@@ -119,9 +140,19 @@ export default function HomeScreen() {
  
 
   const onRefresh = async () => {
+
     setRefreshing(true);
-    // Fetch new data
-    await fetchCocktailsByFirstLetter();
+    
+    const networkState = await NetInfo.fetch();
+    if (networkState.isConnected && networkState.isInternetReachable) {
+      const data =await fetchCocktailsByFirstLetter();
+      setCocktails(data);
+    } else {
+      const data = await getFavorites(); 
+      setCocktails(data);
+      setError('No internet connection');
+    }
+
     setRefreshing(false);
   };
 

@@ -73,19 +73,17 @@ const random = () => {
         marginVertical: 20,
         shadowColor: '#152343',
         shadowOpacity: 0.5,
-        shadowRadius: 40,
-        borderRadius: 40,
+        shadowRadius: 30,
+        borderRadius: 30,
         alignItems: 'center',
-        justifyContent: 'center',
-        shadowOffset: { width: 0, height: 4 },
         elevation: 20,
         alignSelf: 'center', // Center the card horizontally
       }}
     >
       <ImageBackground
-        source={require('../../assets/cardcocktail.png')}
+        source={require('../../assets/image.png')}
         style={{ height: 220, width: '100%' }} 
-        imageStyle={{ resizeMode: 'contain' ,borderRadius: 40}} 
+        imageStyle={{ resizeMode: 'contain' }} 
       >
 
       </ImageBackground>
@@ -161,13 +159,13 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 260,
-    resizeMode: 'cover',
-    borderRadius: 10,
+    borderRadius: 30,
+    resizeMode: 'fill'
   },
 
 
   cardContainer: {
-    width: '90%',
+    width: '80%',
     borderRadius: 10,
     overflow: 'hidden',
     shadowColor: '#000',
