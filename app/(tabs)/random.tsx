@@ -69,14 +69,13 @@ const random = () => {
       onPress={loadRandomCocktail}
       style={{
         width: '100%',
-        maxWidth: 340, // Adjust the maximum width of the card
+        maxWidth: 340, 
         marginVertical: 20,
-        borderRadius: 20,
-        overflow: 'hidden',
         shadowColor: '#152343',
         shadowOpacity: 0.5,
-        shadowRadius: 10,
-
+        shadowRadius: 40,
+        borderRadius: 40,
+        alignItems: 'center',
         justifyContent: 'center',
         shadowOffset: { width: 0, height: 4 },
         elevation: 20,
@@ -85,10 +84,10 @@ const random = () => {
     >
       <ImageBackground
         source={require('../../assets/cardcocktail.png')}
-        style={{ height: 220, width: '100%' }} // Ensure the image background fits the card width
-        imageStyle={{ resizeMode: 'contain' }} // Ensure the image is not cropped and maintains aspect ratio
+        style={{ height: 220, width: '100%' }} 
+        imageStyle={{ resizeMode: 'contain' ,borderRadius: 40}} 
       >
-        {/* Add any additional content here if needed */}
+
       </ImageBackground>
     </TouchableOpacity>
   </Animated.View>
@@ -113,8 +112,11 @@ const random = () => {
                   style={styles.image}
                 />
                 <Text style={styles.cocktailName}>{randomCocktail.strDrink}</Text>
-                <Text style={styles.cocktailtext}>{randomCocktail.strAlcoholic}</Text>
-                <Text style={styles.cocktailtext2}>{randomCocktail.strCategory}</Text>
+                
+                <View style={styles.textRow}>
+                  <Text style={styles.cocktailtext}>{randomCocktail.strAlcoholic}</Text>
+                  <Text style={styles.cocktailtext}>{randomCocktail.strCategory}</Text>
+                </View>
 
               </TouchableOpacity>
 
@@ -151,7 +153,8 @@ const styles = StyleSheet.create({
   contentContainer: {
     width: '100%',
     alignItems: 'center',
-     marginTop: 20,
+     marginTop: 10,
+     paddingBottom: 40,
   },
 
 
@@ -175,29 +178,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     marginTop: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
   },
 
   cocktailName: {
     marginTop: 10,
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'white'
   },
   cocktailtext:{
     marginTop: 10,
-    fontSize: 18,
-    fontWeight: '300',
+    fontSize: 20,
+    fontWeight: '400',
     textAlign: 'center',
     color: 'white'
   },
-  cocktailtext2:{
-    marginTop: 10,
-    fontSize: 18,
-    fontWeight: '300',
-    textAlign: 'center',
-    color: 'white'
+
+  textRow: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    width: '100%',
+    paddingHorizontal: 10,
+    marginTop: 5,
   },
   
 

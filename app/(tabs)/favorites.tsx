@@ -4,9 +4,17 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getFavorites } from '../favoriteRepo';
 import Animated from 'react-native-reanimated';
 import {router} from 'expo-router';
+import 'react-native-gesture-handler';
+import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
+import { removeFromFavorites } from '../favoriteRepo';
+
+
 
 
 const Favorites = () => {
+
+
+  
   const [favCocktails, setFavCocktails] = useState<any[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -14,14 +22,13 @@ const Favorites = () => {
 
 
 
-
+  
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
         setLoading(true);
         const data = await getFavorites();
         setFavCocktails(data);
-        console.log(data);
         setLoading(false);
       } catch (error) {
         setError('Failed to load favorites');
@@ -33,8 +40,31 @@ const Favorites = () => {
 
 
 
+  const renderRightActions = (item) => (
+    <View style={styles.deleteContainer}>
+      <Text style={styles.deleteText}>Delete 🗑️</Text>
+    </View>
+  );
+
+
+
+
+  const handleSwipe = async (item) => {
+    const updatedFavorites = await removeFromFavorites(item);
+    
+    if (updatedFavorites) {
+      setFavCocktails(updatedFavorites); 
+    }
+
+  };
+
+
+
+
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+
     <LinearGradient
       colors={['#FFA500', '#800080']}
       style={styles.container}
@@ -47,30 +77,47 @@ const Favorites = () => {
       <View style={styles.contentContainer}>
       <FlatList
         data={favCocktails}
-        horizontal={true}
+
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.idDrink}
+
         renderItem={({ item }) => (
 
-          <View style={styles.cocktailContainer}>
-            <Image
-              source={{ uri: item.strDrinkThumb }}
-              style={styles.image}
-            />
-            <Text style={styles.cocktailName}>{item.strDrink}</Text>
-            
-            <View style={styles.textRow}>
-            <Text style={styles.cocktailDetail1}>{item.strAlcoholic}</Text>
-            <Text style={styles.cocktailDetail2}>{item.strCategory}</Text>
-          </View>
 
-            <Text style={styles.cocktailDetail1}>{item.strInstructions}</Text>
-          </View>
 
+
+
+          <Swipeable
+            renderRightActions={() => renderRightActions(item)}
+            onSwipeableRightOpen={() => handleSwipe(item)}en 
+          >
+
+              <View style={styles.cocktailContainer}>
+                    <Image
+                      source={{ uri: item.strDrinkThumb }}
+                      style={styles.image} />
+                      
+                    <Text style={styles.cocktailName}>{item.strDrink}</Text>
+                    
+                    <View style={styles.textRow}>
+                        <Text style={styles.cocktailDetail1}>{item.strAlcoholic}</Text>
+                        <Text style={styles.cocktailDetail2}>{item.strCategory}</Text>
+                    </View>
+
+                    <Text style={styles.cocktailDetail1}>{item.strInstructions}</Text>
+                </View>
+                
+
+
+          </Swipeable>
+        
+        
         )}
       />
   </View> 
     </LinearGradient>
+    </GestureHandlerRootView>
+
   );
 
 
@@ -85,6 +132,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
      marginTop: 20,
+     paddingBottom: 80, 
   },
 
   container: {
@@ -93,25 +141,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  headerText: {
+    alignSelf: 'center', 
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 20, 
   },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 8,
-  },
+
     cocktailContainer: {
-    width: 250, 
-    borderRadius: 10,
+    width: 280,
+    borderRadius: 20,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOpacity: 0.3,
-    shadowRadius: 10,
+    shadowRadius: 15,
     shadowOffset: { width: 0, height: 4 },
-    elevation: 5,
+    elevation: 7,
     alignItems: 'center', 
     padding: 10,
     marginHorizontal: 10, 
@@ -120,18 +166,19 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 250, // Set a fixed height for the image
-    borderRadius: 10,
+    height: 250, 
+    borderRadius: 20,
   },
   headerText: {
     paddingLeft: 16,
     color: 'white',
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
+    marginTop: 80, 
   },
   textRow: {
-    flexDirection: 'row', // Align the text in a row
-    justifyContent: 'space-between', // Space between for left and right text
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
     width: '100%',
     paddingHorizontal: 10,
     marginTop: 5,
@@ -159,22 +206,47 @@ const styles = StyleSheet.create({
   cocktailName: {
     textAlign: 'center',
     color: 'black',
-    fontSize: 18,
-    fontWeight: '300',
+    fontSize: 20,
+    fontWeight: '500',
+    marginTop: 10,
+
   },
   cocktailDetail1:{
     textAlign: 'left',
     color: 'black',
-    fontSize: 18,
-    fontWeight: '300',
+    fontSize: 16,
+    fontWeight: '400',
+    marginTop: 10,
 
   },  
    cocktailDetail2:{
     textAlign: 'right',
     color: 'black',
-    fontSize: 18,
-    fontWeight: '300',
+    fontSize: 16,
+    fontWeight: '400',
+    marginTop: 10,
+  },
 
+
+  deleteContainer: {
+    backgroundColor: '#e84b3d',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 110,
+    height: 250,
+    borderRadius: 20,
+    marginTop: 50,
+    paddingTop: 10,
+    
+    marginRight: 10,
+    padding: 5,
+  },
+
+  deleteText: {
+    color: 'white',
+    fontWeight: '500',
+    fontSize: 20,
+    textAlign: 'center',
   },
   
 });

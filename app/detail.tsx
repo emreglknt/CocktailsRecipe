@@ -56,28 +56,36 @@ const Detail = () => {
   }, [cocktailId]);
 
 
+
+
   useEffect(() => {
     const checkFavorite = async () => {
-      const favorite = await isFavorite(details.idDrink);
-      setIsFavoriteStatus(favorite);
+      if (details) {
+        const favorite = await isFavorite(details);
+        setIsFavoriteStatus(favorite);
+      }
     };
-    if (details?.idDrink) {
-      checkFavorite();
-    }
-  }, [details?.idDrink]);
+    
+    checkFavorite();
+  }, [details]);
 
 
-  
 
-  const handleFavoriteToggle = async (details) => {
-    if (isFavoriteStatus) {
-      await removeFromFavorites(details.idDrink); 
-    } else {
-      await addToFavorites(details);
-      
-    }
-  };
-  
+
+
+    const handleFavoriteToggle = async (details) => {
+      if (isFavoriteStatus) {
+
+        await removeFromFavorites(details);
+        setIsFavoriteStatus(false); 
+      } else {
+
+        await addToFavorites(details);
+        setIsFavoriteStatus(true); 
+      }
+    };
+
+
   
 
 

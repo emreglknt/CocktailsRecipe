@@ -24,6 +24,8 @@ const removeFromFavorites = async (cocktail) => {
       let favoriteList = JSON.parse(favorites);
           favoriteList = favoriteList.filter((item) => item.idDrink !== cocktail.idDrink);
           await AsyncStorage.setItem(FAVORITE_KEY, JSON.stringify(favoriteList));
+          return favoriteList
+
     }
   } catch (error) {
     console.error('Error removing from favorites:', error);
@@ -33,20 +35,20 @@ const removeFromFavorites = async (cocktail) => {
 
 
 // Favori kontrol fonksiyonu
-const isFavorite = async (cocktailId) => {
+const isFavorite = async (details) => {
   try {
     const favorites = await AsyncStorage.getItem(FAVORITE_KEY);
     if (favorites !== null) {
       const favoriteList = JSON.parse(favorites);
-      return favoriteList.includes(cocktailId);
-    } else {
-      return false;
+      return favoriteList.some((item) => item.idDrink === details.idDrink);
     }
+    return false;
   } catch (error) {
-    console.error('Error checking favorite:', error);
+    console.error('Error checking favorites:', error);
     return false;
   }
 };
+
 
 // Favorileri alma fonksiyonu
 const getFavorites = async () => {
