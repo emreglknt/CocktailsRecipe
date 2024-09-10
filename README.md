@@ -1,4 +1,4 @@
-# CocktailsRecipe 🍹
+# CocktailsRecipe 🍹 
 
 A vibrant and user-friendly cocktail recipe app built with **React Native Expo**. This app is designed to enhance your mixology experience by helping you explore and create cocktails with ease.
 
