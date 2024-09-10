@@ -10,7 +10,7 @@ A vibrant and user-friendly cocktail recipe app built with **React Native Expo**
 - **Random Cocktail Suggestions**: Feeling undecided? Get surprised by a random cocktail suggestion!
 - **Visually Engaging UI**: Sleek visuals and carefully chosen color schemes make the user experience delightful.
 
-## Technologies Used 💻
+## Technologies Used 💻 
 
 - **React Native Expo**: Cross-platform framework used for building this app.
 - **Axios**: For API requests to fetch cocktail data.
