@@ -15,7 +15,7 @@ A vibrant and user-friendly cocktail recipe app built with **React Native Expo**
 - **React Native Expo**: Cross-platform framework used for building this app.
 - **Axios**: For API requests to fetch cocktail data.
 - **AsyncStorage**: For storing favorite cocktails locally for offline access.
-
+ 
 ## Getting Started 🚀
 
 To get a local copy of this project up and running, follow these steps:
